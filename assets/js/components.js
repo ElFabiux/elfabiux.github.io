@@ -1,4 +1,6 @@
 (function () {
+  let careerDescriptionId = 0;
+
   function createElement(tagName, className, text) {
     const element = document.createElement(tagName);
 
@@ -114,6 +116,7 @@
 
     const routes = [
       { page: "projects", label: "Projects", path: "projects" },
+      { page: "skills", label: "Skills", path: "skills" },
       {
         page: "education-experience",
         label: "Education & Experience",
@@ -123,7 +126,7 @@
       { page: "contact", label: "Contact", path: "contacto" }
     ];
 
-    routes.slice(0, 3).forEach((route) => {
+    routes.slice(0, 4).forEach((route) => {
       navigation.appendChild(createNavigationLink(route, activePage));
     });
 
@@ -134,7 +137,7 @@
       navigation.appendChild(cvLink);
     }
 
-    navigation.appendChild(createNavigationLink(routes[3], activePage));
+    navigation.appendChild(createNavigationLink(routes[4], activePage));
 
     const themeButton = createElement("button", "theme-toggle");
     themeButton.type = "button";
@@ -320,10 +323,61 @@
     }
 
     if (entry.description) {
-      article.appendChild(createElement("p", "record-item__description", entry.description));
+      careerDescriptionId += 1;
+      const detailsId = `career-description-${careerDescriptionId}`;
+      const toggle = createElement("button", "career-item__toggle", "Show description");
+      const details = createElement("div", "career-item__details");
+      const detailsInner = createElement("div", "career-item__details-inner");
+
+      toggle.type = "button";
+      toggle.setAttribute("aria-controls", detailsId);
+      toggle.setAttribute("aria-expanded", "false");
+      details.id = detailsId;
+      details.setAttribute("aria-hidden", "true");
+      detailsInner.appendChild(
+        createElement("p", "record-item__description", entry.description)
+      );
+      details.appendChild(detailsInner);
+
+      toggle.addEventListener("click", () => {
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        toggle.textContent = isOpen ? "Show description" : "Hide description";
+        details.setAttribute("aria-hidden", String(isOpen));
+        details.classList.toggle("is-open", !isOpen);
+      });
+
+      article.append(toggle, details);
     }
 
     return article;
+  }
+
+  function createSkillCategory(category, skills) {
+    const section = createElement("section", "skill-category");
+    section.appendChild(createElement("h3", "skill-category__title", category));
+
+    const list = createElement("ul", "skill-category__list");
+    skills.forEach((skill) => {
+      list.appendChild(createElement("li", "", skill.name));
+    });
+    section.appendChild(list);
+    return section;
+  }
+
+  function createLanguageItem(language) {
+    const item = createElement("div", "language-item");
+    item.appendChild(createElement("span", "language-item__name", language.name));
+
+    if (language.level) {
+      item.appendChild(createElement("span", "language-item__level", language.level));
+    }
+
+    return item;
+  }
+
+  function createPowerSkillItem(skill) {
+    return createElement("li", "power-skill-item", skill.name);
   }
 
   function createCertificationItem(certification) {
@@ -406,7 +460,10 @@
     createCertificationItem,
     createElement,
     createExternalLink,
+    createLanguageItem,
+    createPowerSkillItem,
     createProjectItem,
+    createSkillCategory,
     renderFilters,
     renderFooter,
     renderHeader,

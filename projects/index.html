@@ -6,7 +6,7 @@
     <meta name="description" content="Software projects and selected technical work." />
     <title>Portfolio | Projects</title>
     <script src="../assets/js/theme-init.js?v=4"></script>
-    <link rel="stylesheet" href="../assets/css/styles.css?v=7" />
+    <link rel="stylesheet" href="../assets/css/styles.css?v=12" />
   </head>
   <body data-page="projects" data-root-prefix=".." data-site-config-state="pending">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -28,15 +28,26 @@
         <p class="data-state" data-projects-state data-state="loading" role="status">
           Loading projects...
         </p>
+        <div class="terminal-loader" aria-hidden="true">
+          <div class="terminal-loader__command">
+            <span class="terminal-loader__prompt">$</span>
+            <span>sync projects.csv</span>
+            <span class="terminal-loader__cursor"></span>
+          </div>
+          <div class="terminal-loader__stream">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
         <div class="record-list" data-projects-list></div>
       </section>
     </main>
 
     <footer class="site-footer" data-site-footer></footer>
 
-    <script src="../assets/js/config.js?v=5"></script>
-    <script src="../assets/js/data.js?v=5"></script>
-    <script src="../assets/js/components.js?v=7"></script>
-    <script src="../assets/js/app.js?v=6"></script>
+    <script src="../assets/js/config.js?v=6"></script>
+    <script src="../assets/js/data.js?v=6"></script>
+    <script src="../assets/js/components.js?v=9"></script>
+    <script src="../assets/js/app.js?v=13"></script>
   </body>
 </html>

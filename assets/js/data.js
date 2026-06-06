@@ -1,6 +1,7 @@
 (function () {
   const truthyValues = new Set(["true", "yes", "1"]);
   const siteConfigCacheKey = "portfolio-site-config-v1";
+  const csvCachePrefix = "portfolio-csv-v1:";
 
   function parseCsv(csvText) {
     const rows = [];
@@ -66,18 +67,48 @@
     return `${rootPrefix}/${String(source).replace(/^\.?\//, "")}`;
   }
 
+  function csvCacheKey(sourceUrl) {
+    return `${csvCachePrefix}${sourceUrl}`;
+  }
+
+  function readCachedCsv(sourceUrl) {
+    try {
+      const cachedRows = JSON.parse(sessionStorage.getItem(csvCacheKey(sourceUrl)));
+      return Array.isArray(cachedRows) ? cachedRows : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function cacheCsv(sourceUrl, rows) {
+    try {
+      sessionStorage.setItem(csvCacheKey(sourceUrl), JSON.stringify(rows));
+    } catch (error) {
+      console.warn("CSV data could not be cached for this session.", error);
+    }
+  }
+
   async function fetchCsv(source) {
     if (!source) {
       throw new Error("A CSV data source has not been configured.");
     }
 
-    const response = await fetch(resolveSourceUrl(source), { cache: "no-store" });
+    const sourceUrl = resolveSourceUrl(source);
+    const cachedRows = readCachedCsv(sourceUrl);
+
+    if (cachedRows) {
+      return cachedRows;
+    }
+
+    const response = await fetch(sourceUrl, { cache: "no-store" });
 
     if (!response.ok) {
       throw new Error(`The CSV request failed with status ${response.status}.`);
     }
 
-    return parseCsv(await response.text());
+    const rows = parseCsv(await response.text());
+    cacheCsv(sourceUrl, rows);
+    return rows;
   }
 
   function isVisible(value) {

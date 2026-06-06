@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Technical skills, languages, and professional capabilities."
+    />
+    <title>Portfolio | Skills</title>
+    <script src="../assets/js/theme-init.js?v=4"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=12" />
+  </head>
+  <body data-page="skills" data-root-prefix=".." data-site-config-state="pending">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" data-site-header></header>
+
+    <main class="page-shell" id="main-content">
+      <header class="page-heading">
+        <p class="command-line"><span class="command-prompt">$</span> tree ./skills</p>
+        <h1>Skills</h1>
+        <p>Technical capabilities, languages, and the way I work with others.</p>
+      </header>
+
+      <div data-loading-section aria-busy="true">
+        <p class="data-state" data-skills-state data-state="loading" role="status">
+          Loading skills...
+        </p>
+        <div class="terminal-loader" aria-hidden="true">
+          <div class="terminal-loader__command">
+            <span class="terminal-loader__prompt">$</span>
+            <span>sync skills.csv</span>
+            <span class="terminal-loader__cursor"></span>
+          </div>
+          <div class="terminal-loader__stream">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="skills-sections" data-skills-sections hidden>
+          <section class="skills-section" data-technical-section aria-labelledby="technical-title">
+            <p class="section-command" aria-hidden="true">./technical</p>
+            <h2 class="skills-section__title" id="technical-title">Technical Skills</h2>
+            <div class="skill-category-grid" data-technical-skills></div>
+          </section>
+
+          <section class="skills-section" data-languages-section aria-labelledby="languages-title">
+            <p class="section-command" aria-hidden="true">./languages</p>
+            <h2 class="skills-section__title" id="languages-title">Languages</h2>
+            <div class="language-list" data-languages-list></div>
+          </section>
+
+          <section
+            class="skills-section"
+            data-power-skills-section
+            aria-labelledby="power-skills-title"
+          >
+            <p class="section-command" aria-hidden="true">./power-skills</p>
+            <h2 class="skills-section__title" id="power-skills-title">Power Skills</h2>
+            <ul class="power-skills-list" data-power-skills-list></ul>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer" data-site-footer></footer>
+
+    <script src="../assets/js/config.js?v=6"></script>
+    <script src="../assets/js/data.js?v=6"></script>
+    <script src="../assets/js/components.js?v=9"></script>
+    <script src="../assets/js/app.js?v=13"></script>
+  </body>
+</html>

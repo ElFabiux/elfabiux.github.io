@@ -6,7 +6,7 @@
     <meta name="description" content="Education and professional experience." />
     <title>Portfolio | Education &amp; Experience</title>
     <script src="../assets/js/theme-init.js?v=4"></script>
-    <link rel="stylesheet" href="../assets/css/styles.css?v=7" />
+    <link rel="stylesheet" href="../assets/css/styles.css?v=12" />
   </head>
   <body
     data-page="education-experience"
@@ -27,6 +27,17 @@
         <p class="data-state" data-career-state data-state="loading" role="status">
           Loading entries...
         </p>
+        <div class="terminal-loader" aria-hidden="true">
+          <div class="terminal-loader__command">
+            <span class="terminal-loader__prompt">$</span>
+            <span>sync career.csv</span>
+            <span class="terminal-loader__cursor"></span>
+          </div>
+          <div class="terminal-loader__stream">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
 
         <div class="career-sections" data-career-sections hidden>
           <section class="career-section" aria-labelledby="education-title">
@@ -48,9 +59,9 @@
 
     <footer class="site-footer" data-site-footer></footer>
 
-    <script src="../assets/js/config.js?v=5"></script>
-    <script src="../assets/js/data.js?v=5"></script>
-    <script src="../assets/js/components.js?v=7"></script>
-    <script src="../assets/js/app.js?v=6"></script>
+    <script src="../assets/js/config.js?v=6"></script>
+    <script src="../assets/js/data.js?v=6"></script>
+    <script src="../assets/js/components.js?v=9"></script>
+    <script src="../assets/js/app.js?v=13"></script>
   </body>
 </html>

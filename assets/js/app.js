@@ -66,6 +66,28 @@
     };
   }
 
+  function normalizeSkill(row) {
+    const rawSection = String(row.section || "Technical").trim().toLowerCase();
+    let section = "technical";
+
+    if (["language", "languages"].includes(rawSection)) {
+      section = "languages";
+    } else if (
+      ["power", "power skill", "power skills", "soft skill", "soft skills"].includes(
+        rawSection
+      )
+    ) {
+      section = "power-skills";
+    }
+
+    return {
+      name: row.name || "",
+      section,
+      category: row.category || "General",
+      level: row.level || ""
+    };
+  }
+
   function renderHome(profile) {
     const nameTarget = document.querySelector("[data-profile-name]");
     const descriptionTarget = document.querySelector("[data-profile-description]");
@@ -82,6 +104,102 @@
 
       clearAndAppend(linksTarget, links);
     }
+  }
+
+  function initializeHomeTerminal() {
+    const commandTarget = document.querySelector("[data-terminal-command]");
+    const outputTarget = document.querySelector("[data-terminal-output]");
+
+    if (!commandTarget || !outputTarget) return;
+
+    const scenes = [
+      {
+        command: "cat current-focus.txt",
+        output: ["software / cybersecurity / continuous learning"]
+      },
+      {
+        command: "cat work-mode.conf",
+        output: ["clear over clever", "security in mind", "ship what solves the problem"]
+      },
+      {
+        command: "ping next-challenge.dev",
+        output: ["reply: curiosity alive", "packet loss: 0%", "status: ready to learn"]
+      },
+      {
+        command: "python hack_the_planet.py",
+        output: ["SyntaxError: too much Hollywood"]
+      }
+    ];
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      commandTarget.textContent = scenes[0].command;
+      outputTarget.replaceChildren(
+        ...scenes[0].output.map((line) => ui.createElement("span", "", line))
+      );
+      return;
+    }
+
+    let sceneIndex = 0;
+    let characterIndex = 0;
+    let phase = "typing";
+    let timerId;
+
+    function schedule(delay) {
+      window.clearTimeout(timerId);
+      timerId = window.setTimeout(runScene, delay);
+    }
+
+    function renderOutput(lines) {
+      outputTarget.replaceChildren(
+        ...lines.map((line) => ui.createElement("span", "", line))
+      );
+    }
+
+    function runScene() {
+      const scene = scenes[sceneIndex];
+
+      if (phase === "typing") {
+        characterIndex += 1;
+        commandTarget.textContent = scene.command.slice(0, characterIndex);
+
+        if (characterIndex < scene.command.length) {
+          schedule(45 + Math.round(Math.random() * 45));
+          return;
+        }
+
+        phase = "executing";
+        schedule(520);
+        return;
+      }
+
+      if (phase === "executing") {
+        renderOutput(scene.output);
+        phase = "reading";
+        schedule(2100);
+        return;
+      }
+
+      if (phase === "reading") {
+        renderOutput([]);
+        phase = "deleting";
+        schedule(180);
+        return;
+      }
+
+      characterIndex -= 1;
+      commandTarget.textContent = scene.command.slice(0, characterIndex);
+
+      if (characterIndex > 0) {
+        schedule(24);
+        return;
+      }
+
+      sceneIndex = (sceneIndex + 1) % scenes.length;
+      phase = "typing";
+      schedule(420);
+    }
+
+    schedule(700);
   }
 
   async function renderProjects() {
@@ -227,6 +345,74 @@
     }
   }
 
+  async function renderSkills() {
+    const sectionsContainer = document.querySelector("[data-skills-sections]");
+    const technicalSection = document.querySelector("[data-technical-section]");
+    const languagesSection = document.querySelector("[data-languages-section]");
+    const powerSkillsSection = document.querySelector("[data-power-skills-section]");
+    const technicalContainer = document.querySelector("[data-technical-skills]");
+    const languagesContainer = document.querySelector("[data-languages-list]");
+    const powerSkillsContainer = document.querySelector("[data-power-skills-list]");
+    const stateTarget = document.querySelector("[data-skills-state]");
+
+    try {
+      const rows = await data.fetchCsv(config.dataSources.skills);
+      const skills = data
+        .visibleAndSorted(rows)
+        .map(normalizeSkill)
+        .filter((skill) => skill.name);
+      const technicalSkills = skills.filter((skill) => skill.section === "technical");
+      const languages = skills.filter((skill) => skill.section === "languages");
+      const powerSkills = skills.filter((skill) => skill.section === "power-skills");
+
+      if (skills.length === 0) {
+        sectionsContainer.hidden = true;
+        setState(stateTarget, "No visible skills are available.", "empty");
+        finishLoading(stateTarget);
+        return;
+      }
+
+      const categories = new Map();
+      technicalSkills.forEach((skill) => {
+        if (!categories.has(skill.category)) {
+          categories.set(skill.category, []);
+        }
+        categories.get(skill.category).push(skill);
+      });
+
+      clearAndAppend(
+        technicalContainer,
+        Array.from(categories, ([category, entries]) =>
+          ui.createSkillCategory(category, entries)
+        )
+      );
+      clearAndAppend(
+        languagesContainer,
+        languages.map((language) => ui.createLanguageItem(language))
+      );
+      clearAndAppend(
+        powerSkillsContainer,
+        powerSkills.map((skill) => ui.createPowerSkillItem(skill))
+      );
+
+      technicalSection.hidden = technicalSkills.length === 0;
+      languagesSection.hidden = languages.length === 0;
+      powerSkillsSection.hidden = powerSkills.length === 0;
+      sectionsContainer.hidden = false;
+      setState(stateTarget, "", "");
+      finishLoading(stateTarget);
+    } catch (error) {
+      console.error("Skills could not be loaded.", error);
+      sectionsContainer.hidden = true;
+      setState(
+        stateTarget,
+        "Skills could not be loaded. Check the CSV URL in config.js.",
+        "error"
+      );
+      finishLoading(stateTarget);
+    }
+  }
+
   async function renderCertifications() {
     const statusFilters = document.querySelector("[data-certification-status-filters]");
     const topicFilters = document.querySelector("[data-certification-topic-filters]");
@@ -363,6 +549,7 @@
 
     if (page === "home") renderHome(initialProfile);
     if (page === "contact") renderContact(initialProfile);
+    if (page === "home") initializeHomeTerminal();
 
     if (cachedProfile) {
       document.body.dataset.siteConfigState = "ready";
@@ -371,11 +558,13 @@
     const pageDataPromise =
       page === "projects"
         ? renderProjects()
-        : page === "education-experience"
-          ? renderCareer()
-          : page === "certifications"
-            ? renderCertifications()
-            : Promise.resolve();
+        : page === "skills"
+          ? renderSkills()
+          : page === "education-experience"
+            ? renderCareer()
+            : page === "certifications"
+              ? renderCertifications()
+              : Promise.resolve();
 
     const profile = await profilePromise;
     ui.updateHeaderProfile(profile);
