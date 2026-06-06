@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Education and professional experience." />
+    <title>Portfolio | Education &amp; Experience</title>
+    <script src="../assets/js/theme-init.js?v=4"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=7" />
+  </head>
+  <body
+    data-page="education-experience"
+    data-root-prefix=".."
+    data-site-config-state="pending"
+  >
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" data-site-header></header>
+
+    <main class="page-shell" id="main-content">
+      <header class="page-heading">
+        <p class="command-line"><span class="command-prompt">$</span> cat ./career.log</p>
+        <h1>Education &amp; Experience</h1>
+        <p>A chronological view of professional roles and academic progress.</p>
+      </header>
+
+      <div data-loading-section aria-busy="true">
+        <p class="data-state" data-career-state data-state="loading" role="status">
+          Loading entries...
+        </p>
+
+        <div class="career-sections" data-career-sections hidden>
+          <section class="career-section" aria-labelledby="education-title">
+            <p class="section-command" aria-hidden="true">./education</p>
+            <h2 class="career-section__title" id="education-title">Education</h2>
+            <p class="data-state" data-education-state role="status" hidden></p>
+            <div class="career-list" data-education-list></div>
+          </section>
+
+          <section class="career-section" aria-labelledby="experience-title">
+            <p class="section-command" aria-hidden="true">./experience</p>
+            <h2 class="career-section__title" id="experience-title">Experience</h2>
+            <p class="data-state" data-experience-state role="status" hidden></p>
+            <div class="career-list" data-experience-list></div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer" data-site-footer></footer>
+
+    <script src="../assets/js/config.js?v=5"></script>
+    <script src="../assets/js/data.js?v=5"></script>
+    <script src="../assets/js/components.js?v=7"></script>
+    <script src="../assets/js/app.js?v=6"></script>
+  </body>
+</html>

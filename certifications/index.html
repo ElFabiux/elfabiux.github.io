@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Professional certifications and learning roadmap." />
+    <title>Portfolio | Certifications</title>
+    <script src="../assets/js/theme-init.js?v=4"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=7" />
+  </head>
+  <body data-page="certifications" data-root-prefix=".." data-site-config-state="pending">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" data-site-header></header>
+
+    <main class="page-shell" id="main-content">
+      <header class="page-heading">
+        <p class="command-line"><span class="command-prompt">$</span> list-certificates --all</p>
+        <h1>Certifications</h1>
+        <p>Completed credentials and the technical learning roadmap ahead.</p>
+      </header>
+
+      <div class="filter-layout">
+        <section class="filter-section" aria-labelledby="status-filter-label">
+          <h2 class="filter-label" id="status-filter-label">Status</h2>
+          <div class="filter-group" data-certification-status-filters></div>
+        </section>
+
+        <section class="filter-section" aria-labelledby="topic-filter-label">
+          <h2 class="filter-label" id="topic-filter-label">Topic</h2>
+          <div class="filter-group" data-certification-topic-filters></div>
+        </section>
+      </div>
+
+      <section aria-label="Certification list" data-loading-section aria-busy="true">
+        <p
+          class="data-state"
+          data-certifications-state
+          data-state="loading"
+          role="status"
+        >
+          Loading certifications...
+        </p>
+        <div class="certification-list" data-certifications-list></div>
+      </section>
+    </main>
+
+    <footer class="site-footer" data-site-footer></footer>
+
+    <script src="../assets/js/config.js?v=5"></script>
+    <script src="../assets/js/data.js?v=5"></script>
+    <script src="../assets/js/components.js?v=7"></script>
+    <script src="../assets/js/app.js?v=6"></script>
+  </body>
+</html>

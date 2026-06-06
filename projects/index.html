@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Software projects and selected technical work." />
+    <title>Portfolio | Projects</title>
+    <script src="../assets/js/theme-init.js?v=4"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=7" />
+  </head>
+  <body data-page="projects" data-root-prefix=".." data-site-config-state="pending">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" data-site-header></header>
+
+    <main class="page-shell" id="main-content">
+      <header class="page-heading">
+        <p class="command-line"><span class="command-prompt">$</span> ls ./projects</p>
+        <h1>Projects</h1>
+        <p>Selected work, technical experiments, and practical builds.</p>
+      </header>
+
+      <section class="filter-section" aria-labelledby="project-filter-label">
+        <h2 class="filter-label" id="project-filter-label">Filter by stack</h2>
+        <div class="filter-group" data-project-filters></div>
+      </section>
+
+      <section aria-label="Project list" data-loading-section aria-busy="true">
+        <p class="data-state" data-projects-state data-state="loading" role="status">
+          Loading projects...
+        </p>
+        <div class="record-list" data-projects-list></div>
+      </section>
+    </main>
+
+    <footer class="site-footer" data-site-footer></footer>
+
+    <script src="../assets/js/config.js?v=5"></script>
+    <script src="../assets/js/data.js?v=5"></script>
+    <script src="../assets/js/components.js?v=7"></script>
+    <script src="../assets/js/app.js?v=6"></script>
+  </body>
+</html>
