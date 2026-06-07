@@ -382,35 +382,33 @@
 
   function createCertificationItem(certification) {
     const article = createElement("article", "certification-item");
+    const imageWrapper = createElement("div", "certification-item__image");
+    const imagePlaceholder = createElement(
+      "span",
+      "certification-item__image-placeholder",
+      "$ certificate-image --unavailable"
+    );
+    const safeImageUrl = safeExternalUrl(certification.imageUrl);
 
-    if (certification.imageUrl) {
-      const safeImageUrl = safeExternalUrl(certification.imageUrl);
-
-      if (safeImageUrl) {
-        article.classList.add("has-image");
-        const imageWrapper = createElement("div", "certification-item__image");
-        const image = createElement("img");
-        image.src = safeImageUrl;
-        image.alt = `${certification.name} certificate`;
-        image.loading = "lazy";
-        image.addEventListener("error", () => {
-          article.classList.remove("has-image");
-          imageWrapper.remove();
-        });
-        imageWrapper.appendChild(image);
-        article.appendChild(imageWrapper);
-      }
+    if (safeImageUrl) {
+      const image = createElement("img");
+      image.src = safeImageUrl;
+      image.alt = `${certification.name} certificate`;
+      image.loading = "lazy";
+      image.addEventListener("error", () => {
+        image.replaceWith(imagePlaceholder);
+      });
+      imageWrapper.appendChild(image);
+    } else {
+      imageWrapper.appendChild(imagePlaceholder);
     }
-
-    const content = createElement("div", "certification-item__content");
-    const labelRow = createElement("div", "certification-item__labels");
 
     if (certification.status) {
       const statusClass = certification.status
         .toLowerCase()
         .replace(/\s+/g, "-")
         .replace(/[^a-z-]/g, "");
-      labelRow.appendChild(
+      imageWrapper.appendChild(
         createElement(
           "span",
           `text-label certification-status certification-status--${statusClass}`,
@@ -419,35 +417,44 @@
       );
     }
 
-    certification.topics.forEach((topic) => {
-      labelRow.appendChild(createElement("span", "text-label", topic));
-    });
-
-    if (labelRow.children.length > 0) {
-      content.appendChild(labelRow);
-    }
-
+    article.appendChild(imageWrapper);
+    const content = createElement("div", "certification-item__content");
     content.appendChild(createElement("h2", "record-item__title", certification.name));
 
-    const meta = [certification.issuer, certification.date].filter(Boolean).join(" / ");
-    if (meta) {
-      content.appendChild(createElement("p", "record-item__meta", meta));
+    if (certification.issuer) {
+      content.appendChild(
+        createElement("p", "certification-item__issuer", certification.issuer)
+      );
     }
 
-    if (certification.description) {
+    const details = createElement("div", "certification-item__details");
+
+    if (certification.topics.length > 0) {
       content.appendChild(
-        createElement("p", "record-item__description", certification.description)
+        createElement(
+          "p",
+          "certification-item__topics",
+          certification.topics.join(" / ")
+        )
       );
+    }
+
+    if (certification.date) {
+      details.appendChild(createElement("span", "certification-item__date", certification.date));
     }
 
     const credentialLink = createExternalLink(
       "View credential",
       certification.credentialUrl,
-      "command-button"
+      "certification-item__link"
     );
 
     if (credentialLink) {
-      content.appendChild(credentialLink);
+      details.appendChild(credentialLink);
+    }
+
+    if (details.children.length > 0) {
+      content.appendChild(details);
     }
 
     article.appendChild(content);

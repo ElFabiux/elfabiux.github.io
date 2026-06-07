@@ -60,7 +60,6 @@
       status: normalizedStatus,
       topics: data.splitList(row.topic),
       date: row.date || "",
-      description: row.description || "",
       imageUrl: row.imageUrl || "",
       credentialUrl: row.credentialUrl || ""
     };
