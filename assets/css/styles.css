@@ -292,6 +292,14 @@ a {
   font-size: clamp(1.04rem, 2.2vw, 1.2rem);
 }
 
+.whoami__description p {
+  margin-bottom: 14px;
+}
+
+.whoami__description p:last-child {
+  margin-bottom: 0;
+}
+
 [data-profile-name] {
   min-height: 1.04em;
 }

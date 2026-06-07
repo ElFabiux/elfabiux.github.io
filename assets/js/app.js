@@ -93,7 +93,7 @@
     const linksTarget = document.querySelector("[data-home-links]");
 
     if (nameTarget) nameTarget.textContent = profile.name || "Portfolio Owner";
-    if (descriptionTarget) descriptionTarget.textContent = profile.description || "";
+    if (descriptionTarget) renderFormattedText(descriptionTarget, profile.description || "");
 
     if (linksTarget) {
       const links = [
@@ -103,6 +103,50 @@
 
       clearAndAppend(linksTarget, links);
     }
+  }
+
+  function createFormattedParagraph(text) {
+    const paragraph = ui.createElement("p");
+    const lines = String(text || "").split("\n");
+
+    lines.forEach((line, lineIndex) => {
+      if (lineIndex > 0) {
+        paragraph.appendChild(document.createElement("br"));
+      }
+
+      const parts = line.split(/(\*\*[^*]+\*\*)/g);
+
+      parts.forEach((part) => {
+        if (!part) return;
+
+        if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+          paragraph.appendChild(ui.createElement("strong", "", part.slice(2, -2)));
+        } else {
+          paragraph.appendChild(document.createTextNode(part));
+        }
+      });
+    });
+
+    return paragraph;
+  }
+
+  function renderFormattedText(container, text) {
+    const paragraphs = String(text || "")
+      .replace(/\r\n/g, "\n")
+      .split(/\n\s*\n/)
+      .map((paragraph) =>
+        paragraph
+          .split("\n")
+          .map((line) => line.trim())
+          .join("\n")
+          .trim()
+      )
+      .filter(Boolean);
+
+    clearAndAppend(
+      container,
+      (paragraphs.length > 0 ? paragraphs : [""]).map(createFormattedParagraph)
+    );
   }
 
   function initializeHomeTerminal() {
